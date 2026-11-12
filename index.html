@@ -1,0 +1,213 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>能量水揪團</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
+<style>
+/* Layout: 飲料店價目板風格——頂部標題與篩選列，下方等寬店家卡片網格，外送門檻為主角數字 */
+:root{
+  --bg:#f3f5f0; --surface:#ffffff; --fg:#1f2a22; --muted:#5f6d63; --line:#dde3da;
+  --accent:#2f7a4f; --accent-soft:#e3f0e7; --tea:#b0743a;
+  --display:"Noto Serif TC","Songti TC",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a16; --surface:#1d2520; --fg:#e8eee9; --muted:#9aa89e; --line:#2e3a32;
+  --accent:#6cc28f; --accent-soft:#22382b; --tea:#e0a66b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a16; --surface:#1d2520; --fg:#e8eee9; --muted:#9aa89e; --line:#2e3a32;
+  --accent:#6cc28f; --accent-soft:#22382b; --tea:#e0a66b; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-direction:column;gap:6px}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(28px,5vw,40px);margin:0;letter-spacing:.04em;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+.pick{background:var(--accent-soft);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.pick-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.pick h2{font-family:var(--display);font-weight:900;font-size:22px;margin:0;letter-spacing:.04em}
+.pick-btn{font:inherit;font-weight:700;background:var(--accent);color:var(--surface);border:0;border-radius:8px;padding:10px 18px;cursor:pointer;white-space:nowrap}
+.pick-btn:hover{filter:brightness(1.08)}
+.pick-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pick-btn:disabled{opacity:.7;cursor:default}
+.pick-result{background:var(--surface);border-radius:10px;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;min-height:64px}
+.pick-hint{margin:0;color:var(--muted)}
+.pick-name{display:flex;flex-direction:column;min-width:0;flex:1 1 180px}
+.pick-name b{font-family:var(--display);font-size:24px;line-height:1.3}
+.pick-name span{color:var(--muted);font-size:13px}
+.pick-th{color:var(--muted);font-size:13px;white-space:nowrap}
+.pick-th b{color:var(--tea);font-size:20px;font-variant-numeric:tabular-nums}
+.pick-result .actions{margin-top:0;flex:1 1 220px}
+.rolling .pick-name b{color:var(--muted)}
+.news{display:flex;flex-direction:column;gap:12px}
+.news-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px}
+.news h2{font-family:var(--display);font-weight:900;font-size:22px;margin:0;letter-spacing:.04em}
+.news-date{color:var(--muted);font-size:13px}
+.news-list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;max-height:260px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.news-list:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.news-list li{display:grid;grid-template-columns:6.5em 1fr;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.news-list li:first-child{border-top:0}
+.nb{font-family:var(--display);font-weight:700;color:var(--fg)}
+.nt{min-width:0;font-size:14px}
+.nt b{font-weight:700}
+.when{display:inline-block;font-size:12px;color:var(--tea);font-weight:500;margin-right:6px}
+.nt a{font-size:12px;color:var(--accent)}
+.news-foot{margin:0;font-size:12px;color:var(--muted)}
+@media (max-width:480px){.news-list li{grid-template-columns:1fr;gap:2px}}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.controls input,.controls select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.controls input{flex:1 1 220px;min-width:0}
+.controls input:focus,.controls select:focus,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.budget{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+.budget input{width:110px;flex:none}
+.count{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.dim{opacity:.55}
+.brand{font-family:var(--display);font-weight:700;font-size:19px;margin:0;line-height:1.3}
+.branch{color:var(--muted);font-size:13px;margin:0}
+.th{display:flex;align-items:baseline;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.th small{color:var(--muted);font-size:12px;letter-spacing:.08em}
+.th b{font-size:26px;color:var(--tea);font-variant-numeric:tabular-nums;font-weight:700}
+.th span{color:var(--muted);font-size:13px}
+.free{color:var(--accent)!important}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:500}
+.note{font-size:12px;color:var(--muted)}
+.actions{margin-top:auto;display:grid;grid-template-columns:1fr auto;gap:8px}
+.btn.map{padding-inline:14px}
+.btn{white-space:nowrap}
+.btn.map{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500}
+.btn{display:block;text-align:center;text-decoration:none;font-weight:700;background:var(--accent);color:var(--surface);border-radius:8px;padding:10px}
+.btn:hover{filter:brightness(1.08)}
+.empty{color:var(--muted);text-align:center;padding:32px 0}
+@media (prefers-reduced-motion:no-preference){.btn{transition:filter .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>能量水揪團</h1>
+    <p>點「前往點餐」直接開店家線上訂購頁。外送門檻是最低消費金額，人數少時可先看看哪家門檻低。</p>
+  </header>
+
+  <section class="pick" aria-labelledby="pickTitle">
+    <div class="pick-head">
+      <h2 id="pickTitle">今天喝什麼？</h2>
+      <button id="pickBtn" class="pick-btn" type="button">幫我選一間</button>
+    </div>
+    <div class="pick-result" id="pickResult" aria-live="polite">
+      <p class="pick-hint">選擇性障礙？按下按鈕，幫你隨機抽一間～</p>
+    </div>
+  </section>
+
+  <section class="news" aria-labelledby="newsTitle">
+    <div class="news-head">
+      <h2 id="newsTitle">近期新品、新聞</h2>
+      <span class="news-date">資料整理於 2026/11/12，共 11 則，可捲動查看</span>
+    </div>
+    <ul class="news-list" tabindex="0" aria-label="近期新品清單（可捲動）">
+      <li><span class="nb">迷客夏</span><div class="nt"><b>冬季限定「太妃序曲」4 款</b>：娜杯太妃QQ、太妃烏龍拿鐵、太妃伯爵布朗拿鐵、太妃焙焙拿鐵，另有新配料「太妃奶Q」。<span class="when">11/11 上市</span> <a href="https://www.ctee.com.tw/news/20261109700953-431401" target="_blank" rel="noopener">工商時報</a></div></li>
+      <li><span class="nb">迷客夏</span><div class="nt"><b>品牌大升級</b>：推出期間限定「娜杯糖燻奶霜」，娜杯紅茶同步升級。<span class="when">10/28 起</span> <a href="https://www.setn.com/m/ampnews.aspx?NewsID=1929330" target="_blank" rel="noopener">三立新聞</a></div></li>
+      <li><span class="nb">龜記</span><div class="nt"><b>「抹茶新韻」系列</b>：冷萃抹茶王 65 元、抹茶王鮮乳 80 元、抹茶燕麥乳 90 元。<span class="when">抹茶燕麥乳 11/16 上市</span> <a href="https://www.nownews.com/amp/news/6888513" target="_blank" rel="noopener">NOWnews</a></div></li>
+      <li><span class="nb">茶湯會</span><div class="nt"><b>「茶韻可可」系列</b>：可可蜜柑觀音拿鐵、可可焙茶拿鐵、可可紅茶拿鐵，中南部 80～85 元。<span class="when">11/1 上市</span> <a href="https://www.nownews.com/amp/news/6888513" target="_blank" rel="noopener">NOWnews</a></div></li>
+      <li><span class="nb">鶴茶樓</span><div class="nt"><b>轉型為烏龍茶專賣</b>：推出 20 款「功夫烏龍」，主打白鶴、黑鶴、紅鶴烏龍。<span class="when">11/9～11/13 來店第二杯半價（限純茶）</span> <a href="https://www.storm.mg/article/11171909" target="_blank" rel="noopener">風傳媒</a></div></li>
+      <li><span class="nb">可不可</span><div class="nt"><b>「紅烏龍茶王」系列</b>：紅烏龍茶王、紅烏龍茶王歐蕾等；門市自取買 5 送 1。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+      <li><span class="nb">五桐號</span><div class="nt"><b>「泰奶雪沙」系列</b>：金箔可可、焦糖脆餅、杏仁凍泰奶雪沙。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+      <li><span class="nb">得正</span><div class="nt"><b>梅酒葡萄輕烏龍</b>。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+      <li><span class="nb">一沐日</span><div class="nt"><b>「虎趣桃」系列</b>：虎米Q桃、虎蜜荔枝。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+      <li><span class="nb">麻古茶坊</span><div class="nt"><b>「椰有好心情」開心果系列</b>：開心果芝芝、開心果椰水、開心果可可。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+      <li><span class="nb">大茗</span><div class="nt"><b>「青抹浮島」系列</b>：青抹浮島、青抹蕎麥凍奶、抹一點酸等。<span class="when">10 月下旬</span> <a href="https://www.niusnews.com/=P30tf0fw5" target="_blank" rel="noopener">妞新聞</a></div></li>
+    </ul>
+    <p class="news-foot">壺壺茶、萬波、水巷茶弄、羽兵、一手私藏、八曜、烏弄、50嵐近一個月未查到新品報導。價格與活動以各店公告為準。</p>
+  </section>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="搜尋店名或分店，例如：八曜、得正" aria-label="搜尋店家">
+    <select id="sort" aria-label="排序">
+      <option value="th-asc">門檻低 → 高</option>
+      <option value="th-desc">門檻高 → 低</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>找不到符合的店家，換個關鍵字試試。</p>
+</div>
+
+<script>
+const shops=[
+ ["50嵐","大寮店",100,"https://order.nidin.shop/menu/2835","https://maps.app.goo.gl/FUsiQPxFcWpq6KM47"],
+ ["迷客夏","高雄後庄店",200,"https://order.nidin.shop/menu/16075"],
+ ["壺壺茶","大寮鳳林店",400,"https://order.nidin.shop/menu/29062","https://maps.app.goo.gl/uxsUNkSkBiM8k6Lt7"],
+ ["得正","高雄大寮計劃",200,"https://order.nidin.shop/menu/22260"],
+ ["五桐號","鳳山光遠店",700,"https://order.nidin.shop/menu/13924"],
+ ["萬波島嶼紅茶","鳳山青年店",450,"https://order.nidin.shop/menu/11206"],
+ ["鶴茶樓","鳳山光遠店",450,"https://order.nidin.shop/menu/19704"],
+ ["茶湯會","鳳山光遠店",600,"https://order.nidin.shop/menu/24256"],
+ ["一沐日","大寮鳳林三店",150,"https://aniceholiday.doteat.tw/menu?storeId=f2s0NeRm-0000Kqtij9&showBulletin=1"],
+ ["可不可熟成茶行","高雄大發店",0,"https://order.ocard.co/kebuke/KoAaRQ"],
+ ["麻古茶坊","大寮鳳林店",200,"https://www.eathere.com.tw/","https://maps.app.goo.gl/H36d9DggTHXdSECx6"],
+ ["水巷茶弄","大寮鳳林店",150,"https://www.eathere.com.tw/"],
+ ["羽兵茶坊","",210,"https://www.eathere.com.tw/"],
+ ["大茗本位製茶堂","鳳山青年店",900,"https://order.nidin.shop/menu/20934"],
+ ["一手私藏世界紅茶","鳳山中山西店",600,"https://order.nidin.shop/menu/30670"],
+ ["龜記","鳳山青年店",550,"https://guiji.doteat.tw/menu?storeId=sSUZpiNl-0000USn5G5&showBulletin=1"],
+ ["八曜和茶","鳳山中山門市",500,"https://line.me/R/ti/p/@900zdufd"],
+ ["烏弄","大寮鳳林店",0,"https://order.ocard.co/unochaadmin/Ke9vxK"]
+].map(([brand,branch,th,url,map],i)=>({brand,branch,th,url,map,i}));
+
+function platform(u){
+  if(u.includes("nidin"))return["你訂",""];
+  if(u.includes("doteat"))return["線上點餐",""];
+  if(u.includes("ocard"))return["Ocard",""];
+  if(u.includes("eathere"))return["EatHere","進入後請搜尋店名"];
+  if(u.includes("line.me"))return["LINE 官方帳號","加好友後點餐"];
+  return["線上點餐",""];
+}
+const $=id=>document.getElementById(id);
+const mapUrl=x=>x.map?esc(x.map):"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(x.brand+" "+(x.branch||"高雄大寮"));
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(){
+  const q=$("q").value.trim().toLowerCase();
+  const s=$("sort").value;
+  let list=shops.filter(x=>(x.brand+x.branch).toLowerCase().includes(q));
+  list.sort(s==="th-desc"?(a,c)=>c.th-a.th||a.i-c.i:(a,c)=>a.th-c.th||a.i-c.i);
+  $("count").textContent=`共 ${list.length} 家`;
+  $("empty").hidden=list.length>0;
+  $("grid").innerHTML=list.map(x=>{
+    const [p,note]=platform(x.url);
+    return `<article class="card">
+      <div><h2 class="brand">${esc(x.brand)}</h2><p class="branch">${esc(x.branch||"門市未註明")}</p></div>
+      <div class="th"><small>外送門檻</small>${x.th===0?'<b class="free">免門檻</b>':`<b>${x.th}</b><span>元</span>`}</div>
+      <div class="meta"><span class="chip">${p}</span>${note?`<span class="note">${note}</span>`:""}</div>
+      <div class="actions"><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">前往點餐</a><a class="btn map" href="${mapUrl(x)}" target="_blank" rel="noopener">Google map</a></div>
+    </article>`;
+  }).join("");
+  try{localStorage.setItem("sort",s)}catch(e){}
+}
+let last=-1;
+function showPick(x,final){
+  const th=x.th===0?'<b>免門檻</b>':`外送門檻 <b>${x.th}</b> 元`;
+  $("pickResult").classList.toggle("rolling",!final);
+  $("pickResult").innerHTML=`<div class="pick-name"><b>${esc(x.brand)}</b><span>${esc(x.branch||"門市未註明")}</span></div>`+
+    (final?`<div class="pick-th">${th}</div><div class="actions"><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">前往點餐</a><a class="btn map" href="${mapUrl(x)}" target="_blank" rel="noopener">Google map</a></div>`:"");
+}
+function rand(){let i;do{i=Math.floor(Math.random()*shops.length)}while(i===last&&shops.length>1);return i}
+$("pickBtn").addEventListener("click",()=>{
+  const btn=$("pickBtn"),target=rand();last=target;
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce){showPick(shops[target],true);btn.textContent="再抽一次";return}
+  btn.disabled=true;let n=0;
+  const t=setInterval(()=>{
+    if(++n>=12){clearInterval(t);showPick(shops[target],true);btn.disabled=false;btn.textContent="再抽一次";return}
+    showPick(shops[Math.floor(Math.random()*shops.length)],false);
+  },70);
+});
+try{const s=localStorage.getItem("sort");if(s&&[...$("sort").options].some(o=>o.value===s))$("sort").value=s}catch(e){}
+["q","sort"].forEach(id=>$(id).addEventListener("input",render));
+render();
+</script>
+
+</body></html>
