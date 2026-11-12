@@ -1,5 +1,22 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>能量水揪團</title>
+<meta name="description" content="今天喝什麼？">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wi1ber.github.io/what2drink/">
+<meta property="og:title" content="能量水揪團">
+<meta property="og:description" content="今天喝什麼？">
+<meta property="og:site_name" content="能量水揪團">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="能量水揪團">
+<meta name="twitter:description" content="今天喝什麼？">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
@@ -29,6 +46,11 @@ header p{margin:0;color:var(--muted)}
 .pick h2{font-family:var(--display);font-weight:900;font-size:22px;margin:0;letter-spacing:.04em}
 .pick-btn{font:inherit;font-weight:700;background:var(--accent);color:var(--surface);border:0;border-radius:8px;padding:10px 18px;cursor:pointer;white-space:nowrap}
 .pick-btn:hover{filter:brightness(1.08)}
+.pick-btn-wrap{position:relative}
+.nag{position:absolute;right:0;bottom:calc(100% + 10px);background:var(--fg);color:var(--bg);font-size:14px;font-weight:700;padding:8px 12px;border-radius:10px;white-space:nowrap;z-index:5;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.nag::after{content:"";position:absolute;right:22px;top:100%;border:7px solid transparent;border-top-color:var(--fg)}
+@media (prefers-reduced-motion:no-preference){.nag.pop{animation:pop .35s cubic-bezier(.3,1.6,.5,1)}}
+@keyframes pop{0%{transform:scale(.6) translateY(6px);opacity:0}100%{transform:none;opacity:1}}
 .pick-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pick-btn:disabled{opacity:.7;cursor:default}
 .pick-result{background:var(--surface);border-radius:10px;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;min-height:64px}
@@ -99,7 +121,7 @@ header p{margin:0;color:var(--muted)}
   <section class="pick" aria-labelledby="pickTitle">
     <div class="pick-head">
       <h2 id="pickTitle">今天喝什麼？</h2>
-      <button id="pickBtn" class="pick-btn" type="button">幫我選一間</button>
+      <div class="pick-btn-wrap"><button id="pickBtn" class="pick-btn" type="button">幫我選一間</button><span id="nag" class="nag" role="status" hidden>你乾脆自己選一間</span></div>
     </div>
     <div class="pick-result" id="pickResult" aria-live="polite">
       <p class="pick-hint">選擇性障礙？按下按鈕，幫你隨機抽一間～</p>
@@ -204,7 +226,16 @@ function showPick(x,final){
     (final?`<div class="pick-th">${th}${x.phone?`<br>電話 <b class="pick-tel">${x.phone}</b>`:""}</div><div class="actions"><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">前往點餐</a><a class="btn map" href="${mapUrl(x)}" target="_blank" rel="noopener">Google map</a></div>`:"");
 }
 function rand(){let i;do{i=Math.floor(Math.random()*shops.length)}while(i===last&&shops.length>1);return i}
+let clicks=0,nagTimer;
+const nags=["你乾脆自己選一間","你要按幾次？","你是好了沒？","你今天可以喝水就好","你沒完沒了是吧？"];
+let lastNag=-1;
+function nag(){
+  let k;do{k=Math.floor(Math.random()*nags.length)}while(k===lastNag);lastNag=k;
+  const n=$("nag");n.textContent=nags[k];n.hidden=false;n.classList.remove("pop");void n.offsetWidth;n.classList.add("pop");
+  clearTimeout(nagTimer);nagTimer=setTimeout(()=>{n.hidden=true},2800);
+}
 $("pickBtn").addEventListener("click",()=>{
+  if(++clicks>3)nag();
   const btn=$("pickBtn"),target=rand();last=target;
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   if(reduce){showPick(shops[target],true);btn.textContent="再抽一次";return}
@@ -219,4 +250,5 @@ try{const s=localStorage.getItem("sort");if(s&&[...$("sort").options].some(o=>o.
 render();
 </script>
 
-</body></html>
+</body>
+</html>
